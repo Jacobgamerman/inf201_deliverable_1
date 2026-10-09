@@ -1,49 +1,54 @@
+"""
+TASK 1
+"""
+
 import requests
 import pandas as pd
 import matplotlib.pyplot as plt
 
-# Sett inn din egen client-id her
 from CLIENT_INFO import client_id
 
+# Frost API endpoint and parameters for daily mean air temperature
 endpoint = "https://frost.met.no/observations/v0.jsonld"
 parameters = {
-    "sources": "SN17850",
-    "elements": "mean(air_temperature P1D)",
-    "referencetime": "2025-01-01/2025-12-31",
+    "sources": "SN17850",  # Weather station ID for Ås
+    "elements": "mean(air_temperature P1D)",  # Daily mean air temperature
+    "referencetime": "2025-01-01/2025-12-31",  # Full year of 2025
 }
 
-# Send forespørsel
+# Send request to Frost API using client ID for authentication
 response = requests.get(endpoint, params=parameters, auth=(client_id, ""))
 data = response.json()
 
-# Plukk ut observasjoner
+# Extract observations from the API response
 obs = data["data"]
 
-# Lag DataFrame
+# Build a list of rows containing time and temperature values
 rows = []
 for item in obs:
-    time = item["referenceTime"]
-    temp = item["observations"][0]["value"]
+    time = item["referenceTime"]          # Timestamp of the observation
+    temp = item["observations"][0]["value"]  # Temperature value
     rows.append([time, temp])
 
+# Create a DataFrame with time and temperature columns
 df = pd.DataFrame(rows, columns=["time", "temperature"])
 
-# Konverter tid til datetime
+# Convert time column to datetime format
 df["time"] = pd.to_datetime(df["time"])
 
-# Plot temperatur gjennom året
+# Plot daily mean temperature throughout the year
 plt.figure(figsize=(12,5))
 plt.plot(df["time"], df["temperature"], color="royalblue")
 
-plt.title("Daglig middeltemperatur – Ås (2025)")
-plt.xlabel("Dato")
-plt.ylabel("Temperatur (°C)")
+plt.title("Daily Mean Temperature – Ås (2025)")
+plt.xlabel("Date")
+plt.ylabel("Temperature (°C)")
 plt.grid(True)
 
 plt.tight_layout()
 plt.show()
 
-# Oppsummeringstabell
+# Create a summary table with basic statistics
 summary = {
     "Mean": df["temperature"].mean(),
     "Median": df["temperature"].median(),
