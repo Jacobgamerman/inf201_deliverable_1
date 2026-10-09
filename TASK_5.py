@@ -7,7 +7,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 # Correct client ID
-client_id = "ae511bfb-2ee4-49f4-9883-044b0671fad3"
+from CLIENT_INFO import client_id
 
 # Frost API endpoint and parameters for daily mean air temperature
 endpoint = "https://frost.met.no/observations/v0.jsonld"
