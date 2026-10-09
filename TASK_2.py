@@ -1,10 +1,13 @@
 import requests
 import pandas as pd
-
+from matplotlib import pyplot as plt
+"""
 
 ids = open("CLIENT_INFO.txt","r")
 client_id, client_secret = ids.readlines()
 print(str(client_id))
+"""
+from  CLIENT_INFO import client_id
 #Gotten from "https://frost.met.no/python_example.html"
 endpoint = 'https://frost.met.no/observations/v0.jsonld'
 parameters = {
@@ -13,7 +16,7 @@ parameters = {
     'referencetime': '2025-01-01/2025-12-31',
 }
 # Issue an HTTP GET request
-r = requests.get(endpoint, parameters, auth=("5ceb0caf-ed69-47d8-8b8e-f668da8484e8",''))  #FJERN API KEY!!!
+r = requests.get(endpoint, parameters, auth=(client_id,''))  #FJERN API KEY!!!
 # Extract JSON data
 json = r.json()
 
@@ -31,4 +34,11 @@ df = pd.json_normalize(
     record_path="observations",
     meta=["referenceTime", "sourceId"],
 )
+
+df = df[df["timeOffset"]  == "PT6H"].reset_index(drop=True)
 print(df.head())
+
+plt.plot(df["value"])
+plt.xlabel("Days")
+plt.ylabel(f"Precipation ({df['unit'][0]})")
+plt.show()

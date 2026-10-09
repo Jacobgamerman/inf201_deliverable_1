@@ -218,3 +218,7 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+#SECRET FILES
+CLIENT_INFO.py
+CLIENT_INFO.txt
