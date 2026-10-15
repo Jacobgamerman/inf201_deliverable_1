@@ -2,13 +2,8 @@ import requests
 import pandas as pd
 from matplotlib import pyplot as plt
 from TASK_1 import task_1
-"""
-
-ids = open("CLIENT_INFO.txt","r")
-client_id, client_secret = ids.readlines()
-print(str(client_id))
-"""
 from  CLIENT_INFO import client_id
+
 #Gotten from "https://frost.met.no/python_example.html"
 endpoint = 'https://frost.met.no/observations/v0.jsonld'
 parameters = {
@@ -17,7 +12,7 @@ parameters = {
     'referencetime': '2025-01-01/2025-12-31',
 }
 # Issue an HTTP GET request
-r = requests.get(endpoint, parameters, auth=(client_id,''))  #FJERN API KEY!!!
+r = requests.get(endpoint, parameters, auth=(client_id,''))
 # Extract JSON data
 json = r.json()
 
