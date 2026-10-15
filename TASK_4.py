@@ -4,6 +4,25 @@ from  CLIENT_INFO import client_id
 import yaml
 
 def heatwaves(scources = "SN17850", year = "2025") -> None:
+    """Identifies and exports periods of heatwaves for a given weather station and year.
+
+    Queries the MET Norway Frost API for daily maximum air temperatures, identifies
+    consecutive periods of 5 or more days where temperatures reach or exceed 27°C,
+    fetches the station's metadata name, and exports the summary to a YAML file.
+
+    Args:
+        scources: Frost station identifier (e.g., 'SN17850'). Defaults to 'SN17850'.
+        year: Target year to query, formatted as a string or integer (e.g., '2025' or 2025).
+            Defaults to '2025'.
+
+    Returns:
+        None. The results are printed to stdout and saved directly to a YAML file
+        named 'Heatwaves_<scources>_<year>.yml'.
+
+    Notes:
+        Requires the global variable `client_id` to be defined for HTTP basic
+        authentication with the Frost API.
+    """
     #Inspired from "https://frost.met.no/python_example.html"
     endpoint = 'https://frost.met.no/observations/v0.jsonld'
     parameters = {
@@ -63,7 +82,7 @@ def heatwaves(scources = "SN17850", year = "2025") -> None:
         "year": year
     }
 
-    with open("Heatwaves_" + scources + "_" + year + "_.yml", "w") as file:
+    with open(f"Heatwaves_{scources}_{year}.yml", "w") as file:
         yaml.dump(heatwave_summmary, file, sort_keys=False)
     print("CODE FINISHED:  yaml file created")
 
